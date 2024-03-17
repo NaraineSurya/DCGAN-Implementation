@@ -34,3 +34,29 @@ class Discriminator (nn.Module):
     
     def forward(self, x):
         return self.disc(x)
+    
+
+class Generator (nn.module):
+    def __init__(self, z_dim, channels_img, n_features):
+        super(Generator, self).__init__()
+        self.gen = nn.Sequential(
+            # Input = N x z_dim x 1 x 1
+            self._block(z_dim, n_features*16, 4, 1, 0), # N x f*16 x 4 x 4
+            self._block(n_features*16, n_features*8, 4, 2, 1), # 8 x 8
+            self._block(n_features*8, n_features*4, 4, 2, 1), # 16 x 16
+            self._block(n_features*4, n_features*2, 4, 2, 1), # 32 x 32
+
+            nn.ConvTranspose2d(n_features*2, channels_img, 4, 2, 1), # 64 x 64 
+            nn.Tanh(),
+        )
+    
+    def _block(self, in_channels, out_channels, kernel_size, stride, padding):
+        return nn.Sequential(
+            nn.ConvTranspose2d(in_channels, out_channels,
+                               kernel_size, stride, padding),
+            nn.ReLU()
+        )
+    
+    def forward(self, x):
+        return self.gen
+        
