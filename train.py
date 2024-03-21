@@ -74,7 +74,32 @@ for epoch in range(NUM_EPOCH):
         loss_gen.backward()
         opt_gen.step()
 
-        
+        if batch_idx % 100 == 0:
+            print(
+                f"Epoch [{epoch} / {NUM_EPOCH}] Batch {batch_idx}/{len(DataLoader)} \
+                    Loss D : {loss_disc: .4f}, loss G : {loss_gen:.4f}"
+            )
+
+            with torch.no_grad():
+                fake = gen(fixed_noise)
+
+                img_grid_real = torchvision.utils.make_grid(
+                    real[:32], normalize=True
+                )
+                img_grid_fake = torchvision.utils.make_grid(
+                    fake[:32], normalize=True
+                )
+
+                writer_real.add_image("Real", img_grid_real, global_step=step)
+                writer_real.add_image("Fake", img_grid_fake, global_step=step)
+
+            step += 1
+
+            
+
+
+
+
 
 
 
