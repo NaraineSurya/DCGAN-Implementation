@@ -56,7 +56,28 @@ for epoch in range(NUM_EPOCH):
     for batch_idx, (real, _) in enumerate(loader):
         real = real.to(device)
         noise = torch.randn((BATCH_SIZE, Z_DIM, 1, 1)).to(device)
+
+        # Train Discriminator
+        disc_real = disc(real).reshape(-1)
+        loss_disc_real = criterion(disc_real, torch.ones_like(disc_real))
+        disc_fake = disc(fake).reshape(-1)
+        loss_disc_fake = criterion(disc_fake, torch.zeros_like(disc_fake))
+        loss_disc = (loss_disc_fake + loss_disc_real) / 2
+        disc.zero_grad()
+        loss_disc.backward(retain_graph = True)
+        opt_disc.step()
+
+        # Train Generator
+        output = disc(fake).reshape(-1)
+        loss_gen = criterion(output, torch.ones_like(output))
+        gen.zero_grad()
+        loss_gen.backward()
+        opt_gen.step()
+
         
+
+
+
 
 
 
