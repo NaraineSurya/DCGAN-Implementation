@@ -1,4 +1,4 @@
-# DCGAN-Implementation uUsing pytorch
+# DCGAN-Implementation Using pytorch
 
 
 DCGAN paper:
