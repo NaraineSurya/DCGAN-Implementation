@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from model import Discriminator, Generator, initialize_weights
 
-device = torch.device("cude" if torch.cuda.is_available else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 LEARNING_RATE = 2e-4
 BATCH_SIZE = 128
 IMG_SIZE = 64
@@ -56,6 +56,7 @@ for epoch in range(NUM_EPOCH):
     for batch_idx, (real, _) in enumerate(loader):
         real = real.to(device)
         noise = torch.randn((BATCH_SIZE, Z_DIM, 1, 1)).to(device)
+        fake = gen(noise)
 
         # Train Discriminator
         disc_real = disc(real).reshape(-1)
